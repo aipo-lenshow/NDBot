@@ -1,0 +1,8 @@
+.env
+sessions/
+cookies/
+downloads/
+rclone/rclone.conf
+*.session
+__pycache__/
+*.pyc
