@@ -1,6 +1,5 @@
-# 📥 NDBot v1.0501
-
-**by AiPo** · Docker 自部署统一资源下载机器人 — YouTube / X.com / Bilibili / Instagram / TikTok / Telegram 媒体 + 云盘同步
+# 📥 NDBot v1.0501   by AiPo
+## Docker 自部署统一资源下载机器人 — YouTube / X.com / Bilibili / Instagram / TikTok / Telegram 媒体 + 云盘同步
 
 ## 快速安装
 
@@ -10,7 +9,7 @@
 bash install.sh
 ```
 
-### 方式二：Python TUI 向导（更美观的终端界面）
+### 方式二：Python TUI 向导（界面化，需要安装缺失）
 
 ```bash
 python3 install_tui.py
@@ -132,7 +131,7 @@ docker compose up -d
 > 这三个云盘 rclone **没有原生支持**，必须先通过 [AList](https://alist.nn.ci) 作为中间层。
 > AList 支持几十种国内云盘，部署后提供 WebDAV 接口供 rclone 连接。
 
-**第一步：部署 AList（Docker，约1分钟）**
+**第一步：部署 AList（Docker）**
 
 ```bash
 docker run -d   --name alist   --restart unless-stopped   -p 5244:5244   -v /你的数据目录/alist:/opt/alist/data   xhofe/alist:latest
