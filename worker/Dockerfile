@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.14-slim
 
 # ffmpeg：yt-dlp 合并视频/转码用
 # rclone：云盘同步
