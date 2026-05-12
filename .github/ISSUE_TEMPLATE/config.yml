@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 安装/使用问题 (Setup or usage questions)
+    url: https://github.com/aipo-lenshow/NDBot/discussions
+    about: 不是 bug, 只是不知道怎么用 — 去 Discussions 提问. Not a bug, just unsure how to use it — ask in Discussions.
+  - name: 📖 README 中文
+    url: https://github.com/aipo-lenshow/NDBot/blob/main/README.md
+    about: 完整安装 / 配置 / 云盘同步 / Cookie 文档
+  - name: 📖 README English
+    url: https://github.com/aipo-lenshow/NDBot/blob/main/README_EN.md
+    about: Full setup / configuration / cloud sync / cookies docs

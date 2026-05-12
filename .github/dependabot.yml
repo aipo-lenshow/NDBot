@@ -1,0 +1,62 @@
+# ─────────────────────────────────────────────────────────────────
+# Dependabot — automated dependency upgrades
+#
+# Watches:
+#   - Python deps in bot/ worker/ web/ (pip)
+#   - Base images in 3 Dockerfiles (docker)
+#   - GitHub Actions in .github/workflows/ (github-actions)
+#
+# Frequency: weekly (Mondays).
+# PRs land against main with `dependencies` label.
+# ─────────────────────────────────────────────────────────────────
+version: 2
+updates:
+  # ── Python: bot ──
+  - package-ecosystem: "pip"
+    directory: "/bot"
+    schedule:
+      interval: "weekly"
+    labels: ["dependencies", "python"]
+    open-pull-requests-limit: 5
+
+  # ── Python: worker ──
+  - package-ecosystem: "pip"
+    directory: "/worker"
+    schedule:
+      interval: "weekly"
+    labels: ["dependencies", "python"]
+    open-pull-requests-limit: 5
+
+  # ── Python: web ──
+  - package-ecosystem: "pip"
+    directory: "/web"
+    schedule:
+      interval: "weekly"
+    labels: ["dependencies", "python"]
+    open-pull-requests-limit: 5
+
+  # ── Docker base images ──
+  - package-ecosystem: "docker"
+    directory: "/bot"
+    schedule:
+      interval: "weekly"
+    labels: ["dependencies", "docker"]
+
+  - package-ecosystem: "docker"
+    directory: "/worker"
+    schedule:
+      interval: "weekly"
+    labels: ["dependencies", "docker"]
+
+  - package-ecosystem: "docker"
+    directory: "/web"
+    schedule:
+      interval: "weekly"
+    labels: ["dependencies", "docker"]
+
+  # ── GitHub Actions ──
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels: ["dependencies", "ci"]

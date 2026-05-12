@@ -1,6 +1,10 @@
 # 📥 NDBot v1.01.0512   by AiPo
 ## Self-hosted Docker bot for unified media downloads — YouTube / X.com / Bilibili / Instagram / TikTok / Telegram media + cloud sync
 
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+[![Release](https://img.shields.io/github/v/release/aipo-lenshow/NDBot)](https://github.com/aipo-lenshow/NDBot/releases)
+[![CI](https://github.com/aipo-lenshow/NDBot/actions/workflows/scan.yml/badge.svg)](https://github.com/aipo-lenshow/NDBot/actions/workflows/scan.yml)
+
 > [中文 README](./README.md)
 
 ## Quick install
