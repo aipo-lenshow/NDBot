@@ -1,0 +1,4 @@
+# 显示 GitHub repo 页面顶部的 "Sponsor" 按钮.
+# 需要先在 https://github.com/sponsors/aipo-lenshow 启用 GitHub Sponsors,
+# 启用前按钮可能不显示 / 显示但点击无效 — 这是 GitHub 行为, 跟本文件无关.
+github: aipo-lenshow
