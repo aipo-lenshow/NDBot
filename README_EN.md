@@ -7,6 +7,16 @@
 
 > [中文 README](./README.md)
 
+## Screenshots
+
+**Web console — file browser with in-page preview**
+
+![NDBot web console](docs/screenshots/web-ui.png)
+
+**Telegram bot — send a link, get the file delivered, auto-sorted**
+
+<p><img src="docs/screenshots/telegram-bot.jpg" alt="NDBot Telegram bot conversation screenshot" width="380"></p>
+
 ## Quick install
 
 ### Option 1: Shell interactive wizard (recommended, zero deps)

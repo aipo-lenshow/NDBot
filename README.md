@@ -7,6 +7,16 @@
 
 > [English README](./README_EN.md)
 
+## 截图
+
+**Web 控制台 — 文件浏览 + 在线预览**
+
+![NDBot Web 控制台](docs/screenshots/web-ui.png)
+
+**Telegram Bot — 发链接, 自动下载 + 归类**
+
+<p><img src="docs/screenshots/telegram-bot.jpg" alt="NDBot Telegram Bot 对话截图" width="380"></p>
+
 ## 快速安装
 
 ### 方式一：Shell 交互向导（推荐，零依赖）
