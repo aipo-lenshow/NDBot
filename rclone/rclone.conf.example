@@ -1,0 +1,150 @@
+# =============================================================
+#  rclone 配置文件示例
+#  复制此文件为 rclone.conf，填入真实授权信息
+#  推荐：在宿主机运行 rclone config 生成后直接复制过来
+# =============================================================
+
+# =============================================================
+#  重要说明：百度网盘、阿里云盘、夸克网盘
+#  在官方 rclone 中【没有原生后端】，无法直接配置！
+#
+#  解决方案：先部署 AList（https://alist.nn.ci）
+#  AList 支持：百度网盘 / 阿里云盘 / 夸克 / 迅雷 / 115 /
+#              PikPak / 天翼 / 移动彩云 / 189 等几十种
+#  AList 开启 WebDAV 后，rclone 用 webdav 类型连接即可
+#  详细步骤见本文件末尾和 README.md
+# =============================================================
+
+
+# ── OneDrive（原生支持）───────────────────────────────────────
+# 配置命令：rclone config → n → 类型选 onedrive → OAuth 授权
+[onedrive]
+type = onedrive
+token = {"access_token":"填入token","expiry":"2026-01-01T00:00:00Z","refresh_token":"填入refresh_token","token_type":"Bearer"}
+drive_id = 填入drive_id
+drive_type = personal
+
+
+# ── Google Drive（原生支持）──────────────────────────────────
+# 配置命令：rclone config → n → 类型选 drive → OAuth 授权
+[gdrive]
+type = drive
+scope = drive
+token = {"access_token":"填入token","expiry":"2026-01-01T00:00:00Z","refresh_token":"填入refresh_token","token_type":"Bearer"}
+
+
+# ── S3 兼容（原生支持）───────────────────────────────────────
+# 适用：Cloudflare R2 / 腾讯COS / 阿里OSS / MinIO 等
+# 配置命令：rclone config → n → 类型选 s3 → 选对应服务商
+
+# Cloudflare R2 示例：
+[r2]
+type = s3
+provider = Cloudflare
+access_key_id = 填入key
+secret_access_key = 填入secret
+endpoint = https://你的账户ID.r2.cloudflarestorage.com
+
+# 腾讯 COS 示例：
+# [cos]
+# type = s3
+# provider = TencentCOS
+# access_key_id = 填入SecretId
+# secret_access_key = 填入SecretKey
+# endpoint = cos.ap-guangzhou.myqcloud.com
+
+
+# ── 家用 NAS - Samba（原生支持）──────────────────────────────
+# 配置命令：rclone config → n → 类型选 smb
+[mynas_smb]
+type = smb
+host = <你的NAS IP>            # 如 192-168-1-100, 或 nas.lan / nas.local
+user = 你的用户名
+pass = 用rclone_obscure加密后的密码
+# 生成加密密码：rclone obscure 你的明文密码
+
+
+# ── 家用 NAS - SFTP（原生支持）────────────────────────────────
+# 配置命令：rclone config → n → 类型选 sftp
+# 适用：群晖 DSM / 威联通 QTS / 任何开启了 SSH 的 Linux
+[mynas_sftp]
+type = sftp
+host = <你的NAS IP>            # 如 192-168-1-100, 或 nas.lan / nas.local
+user = 你的用户名
+# 密码登录：
+pass = 用rclone_obscure加密后的密码
+# 或密钥登录（推荐）：
+# key_file = /root/.ssh/id_rsa
+
+
+# ── WebDAV（原生支持）────────────────────────────────────────
+# 用于连接 AList / 坚果云 / 群晖 WebDAV 等
+# 配置命令：rclone config → n → 类型选 webdav
+
+# === 通过 AList 连接百度网盘 / 阿里云盘 / 夸克 ===
+# 前提：已在宿主机部署 AList 并添加了对应云盘账号
+[alist]
+type = webdav
+url = http://你的服务器IP:5244/dav
+vendor = other
+user = 你的AList用户名
+pass = 用rclone_obscure加密后的AList密码
+# 测试连接：rclone lsd alist:
+
+# 坚果云示例：
+# [jianguo]
+# type = webdav
+# url = https://dav.jianguoyun.com/dav/
+# vendor = other
+# user = 你的坚果云邮箱
+# pass = 用rclone_obscure加密后的应用密码
+
+
+# =============================================================
+#  国内云盘（百度/阿里/夸克）通过 AList 配置步骤
+# =============================================================
+#
+#  第一步：部署 AList（Docker 方式，最简单）
+#
+#    docker run -d \
+#      --name alist \
+#      --restart unless-stopped \
+#      -p 5244:5244 \
+#      -v /你的数据目录/alist:/opt/alist/data \
+#      xhofe/alist:latest
+#
+#  第二步：获取初始密码
+#
+#    docker exec -it alist ./alist admin random
+#    # 或设置固定密码：
+#    docker exec -it alist ./alist admin set 你的密码
+#
+#  第三步：添加云盘账号
+#
+#    浏览器访问 http://你的服务器IP:5244
+#    → 登录 → 存储 → 添加
+#    → 选择对应云盘类型（百度网盘 / 阿里云盘 / 夸克 等）
+#    → 按提示填写 token 或扫码登录
+#
+#  第四步：获取 rclone 密码（加密格式）
+#
+#    rclone obscure 你的AList密码
+#    # 将输出的加密字符串填入上方 pass =
+#
+#  第五步：测试连接
+#
+#    rclone lsd alist:
+#    # 应该能看到 AList 根目录下的内容
+#
+#  第六步：修改 NDBot.env
+#
+#    RCLONE_ENABLE=true
+#    RCLONE_REMOTE=alist
+#    RCLONE_DEST=NDBot
+#
+#  第七步：复制配置文件
+#
+#    cp rclone.conf 到 NDBot 项目的 rclone/ 目录
+#    docker compose up -d
+#
+# =============================================================

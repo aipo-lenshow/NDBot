@@ -1,0 +1,104 @@
+# NDBot v1.01.0512
+# 改进：所有变量自动从根目录 .env 读取，无需额外配置
+
+services:
+
+  bot:
+    build: ./bot
+    container_name: ndbot_bot
+    restart: unless-stopped
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
+      - TG_API_ID=${TG_API_ID}
+      - TG_API_HASH=${TG_API_HASH}
+      - ALLOWED_USERS=${ALLOWED_USERS}
+      - PROXY_HOST=${PROXY_HOST}
+      - PROXY_PORT=${PROXY_PORT}
+      - REDIS_URL=redis://redis:6379/0
+      - RCLONE_ENABLE=${RCLONE_ENABLE:-false}
+      - RCLONE_REMOTE=${RCLONE_REMOTE:-}
+      - RCLONE_DEST=${RCLONE_DEST:-NDBot}
+      - RCLONE_MODE=${RCLONE_MODE:-manual}
+      - TZ=Asia/Shanghai
+      # 系统级代理，供容器内所有 HTTP 请求使用，根据自己需要设定
+      - http_proxy=http://${PROXY_HOST}:${PROXY_PORT}
+      - https_proxy=http://${PROXY_HOST}:${PROXY_PORT}
+      - HTTP_PROXY=http://${PROXY_HOST}:${PROXY_PORT}
+      - HTTPS_PROXY=http://${PROXY_HOST}:${PROXY_PORT}
+    volumes:
+      - ./sessions:/sessions          # Pyrogram session 持久化
+      - ${DOWNLOAD_PATH:-./downloads}:/downloads:shared
+    depends_on:
+      - redis
+    networks:
+      - ndbotnet
+
+  worker:
+    build: ./worker
+    container_name: ndbot_worker
+    restart: unless-stopped
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
+      - TG_API_ID=${TG_API_ID}
+      - TG_API_HASH=${TG_API_HASH}
+      - PROXY_HOST=${PROXY_HOST}
+      - PROXY_PORT=${PROXY_PORT}
+      - REDIS_URL=redis://redis:6379/0
+      - DOWNLOAD_DIR=/downloads
+      - MAX_CONCURRENT_DOWNLOADS=${MAX_CONCURRENT_DOWNLOADS:-3}
+      - MAX_FILE_SIZE_MB=${MAX_FILE_SIZE_MB:-2000}
+      - RCLONE_ENABLE=${RCLONE_ENABLE:-false}
+      - RCLONE_REMOTE=${RCLONE_REMOTE:-}
+      - RCLONE_DEST=${RCLONE_DEST:-NDBot}
+      - RCLONE_DELETE_AFTER=${RCLONE_DELETE_AFTER:-false}
+      - RCLONE_MODE=${RCLONE_MODE:-manual}
+      - TZ=Asia/Shanghai
+      - http_proxy=http://${PROXY_HOST}:${PROXY_PORT}
+      - https_proxy=http://${PROXY_HOST}:${PROXY_PORT}
+      - HTTP_PROXY=http://${PROXY_HOST}:${PROXY_PORT}
+      - HTTPS_PROXY=http://${PROXY_HOST}:${PROXY_PORT}
+    volumes:
+      - ./sessions:/sessions
+      - ${DOWNLOAD_PATH:-./downloads}:/downloads:shared
+      - ./cookies:/cookies            # yt-dlp cookies（可选，用于需要cookies的环境，看用户需要）
+      - ./rclone:/config/rclone:ro    # rclone.conf 只读挂载
+    depends_on:
+      - redis
+    networks:
+      - ndbotnet
+
+  redis:
+    image: redis:7-alpine
+    container_name: ndbot_redis
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - redis_data:/data
+    networks:
+      - ndbotnet
+
+  web:
+    build: ./web
+    container_name: ndbot_web
+    restart: unless-stopped
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - DOWNLOAD_DIR=/downloads
+      - WEB_SECRET=${WEB_SECRET:-}
+      - TZ=Asia/Shanghai
+    ports:
+      - "${WEB_PORT:-5000}:5000"
+    volumes:
+      - ${DOWNLOAD_PATH:-./downloads}:/downloads:ro,shared
+    depends_on:
+      - redis
+    networks:
+      - ndbotnet
+
+volumes:
+  redis_data:
+
+networks:
+  ndbotnet:
+    driver: bridge

@@ -1,0 +1,23 @@
+.env
+sessions/
+cookies/
+downloads/
+rclone/rclone.conf
+*.session
+__pycache__/
+*.pyc
+docker-compose.yml.bak
+
+# ─── Internal-only (PERSONAL DEV NOTES, NEVER PUSH) ─
+.internal/
+
+# ─── Misc ─
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+*.tar.gz
+*.tgz
+*.zip
