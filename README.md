@@ -17,6 +17,97 @@
 
 <p><img src="docs/screenshots/telegram-bot.jpg" alt="NDBot Telegram Bot 对话截图" width="380"></p>
 
+## ⭐ 亮点 Highlights
+
+<table>
+<tr>
+<td valign="top" width="33%">
+
+**📥 通用下载器**
+
+主流 6 平台 (YouTube / X / Bilibili / Instagram / TikTok / Telegram 媒体) + yt-dlp 支持的 1000+ 网站. 画质可选 (最佳 / 1080p / 720p / 480p), 字幕 / 封面 / MP3 / M4A 一并拿.
+
+</td>
+<td valign="top" width="33%">
+
+**🤖 发链接, 取文件**
+
+转任意 URL 给你的 Telegram Bot, 文件 30 秒推回来. 内联按钮选格式 / 画质. 多用户走白名单 (`ALLOWED_USERS`).
+
+</td>
+<td valign="top" width="33%">
+
+**🖥️ Web 控制台**
+
+`:5000` 文件浏览 + 在线预览 (视频 / 音频) + 任务队列监控 + 磁盘看板. 可选密码保护. 暗色为主题.
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="33%">
+
+**☁️ 自动云盘同步**
+
+rclone 原生接 OneDrive / Google Drive / S3 / R2 / NAS (Samba / SFTP). 百度 / 阿里 / 夸克通过 AList 转 WebDAV. 下完自动推, 或 `/sync` 手动.
+
+</td>
+<td valign="top" width="33%">
+
+**🔓 Cookies 解锁会员**
+
+丢一份 `youtube.txt` / `xcom.txt` / `bilibili.txt` 到 `./cookies/`, 即可下载 YouTube 会员 / X 私密 / B 站大会员. 热加载, 不用重启.
+
+</td>
+<td valign="top" width="33%">
+
+**⚡ 一行装机**
+
+`bash install.sh` 交互向导一次过完代理 + Telegram + 云盘 + Cookies 配置. 或 `python3 install_tui.py` 图形版. 4 个 Docker 服务, 默认 amd64 + arm64.
+
+</td>
+</tr>
+</table>
+
+<details>
+<summary><strong>📋 完整功能 (持续更新)</strong></summary>
+
+**支持平台**
+
+| 平台 | 支持内容 |
+|------|----------|
+| 🎬 YouTube | 视频 (最佳 / 1080p / 720p / 480p) / MP3 / M4A / 字幕 / 封面 |
+| 🐦 X.com (Twitter) | 视频 / 图片 / 全部媒体 |
+| 📺 Bilibili | 视频 / 音频 |
+| 📸 Instagram | 视频 / 图片 |
+| 🎵 TikTok | 视频 / 音频 |
+| 🌐 其他 | 所有 yt-dlp 支持的 1000+ 网站 |
+| 📨 Telegram 媒体 | 转发消息给机器人即可保存 |
+
+**架构 / 部署**
+
+- 4 个服务: `bot` (Pyrogram + PTB) / `worker` (yt-dlp + rclone) / `web` (Flask UI) / `redis` (任务队列)
+- 双安装器: Shell 向导 (`install.sh`, 零依赖) + Python TUI (`install_tui.py`, 自动装 questionary + rich)
+- 并发下载数可配 (`MAX_CONCURRENT_DOWNLOADS`)
+- 单文件大小限制可配 (`MAX_FILE_SIZE_MB`)
+- 国内代理友好: 一次配置, 所有容器内 HTTP 请求自动走代理
+- CIFS / NAS 共享挂载支持 (`:shared` propagation)
+- `/api/health` 端点 (返回 version + redis 状态)
+
+**云盘同步细节**
+
+- 原生 rclone 后端: onedrive / drive / s3 / smb / sftp / webdav / ftp
+- AList 中转: 百度网盘 / 阿里云盘 / 夸克 / 迅雷 / 115 / PikPak / 天翼 / 移动彩云 / 189 等
+- 触发模式: `auto` (下完即推) / `manual` (`/sync` 命令)
+- 上传后可选: 保留本地 / 删本地
+
+**安全 / 运维**
+
+- 三件套防线: env vars + pre-commit hook + GitHub CI 扫描敏感字符串
+- 全局 docker compose 命令: logs / restart / 更新 yt-dlp / 清理任务
+- 卸载干净: `docker compose down --rmi all --volumes` + `rm -rf <install dir>`
+
+</details>
+
 ## 快速安装
 
 ### 方式一：Shell 交互向导（推荐，零依赖）
@@ -63,20 +154,6 @@ mkdir -p downloads sessions cookies rclone
 docker compose up -d --build
 docker compose logs -f
 ```
-
----
-
-## 功能说明
-
-| 平台 | 支持内容 |
-|------|----------|
-| 🎬 YouTube | 视频（最佳/1080p/720p/480p）/ MP3 / M4A / 字幕 / 封面 |
-| 🐦 X.com (Twitter) | 视频 / 图片 / 全部媒体 |
-| 📺 Bilibili | 视频 / 音频 |
-| 📸 Instagram | 视频 / 图片 |
-| 🎵 TikTok | 视频 / 音频 |
-| 🌐 其他 | 所有 yt-dlp 支持的 1000+ 网站 |
-| 📨 Telegram 媒体 | 转发消息给机器人即可保存 |
 
 ---
 

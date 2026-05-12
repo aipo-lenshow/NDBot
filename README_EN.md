@@ -17,6 +17,97 @@
 
 <p><img src="docs/screenshots/telegram-bot.jpg" alt="NDBot Telegram bot conversation screenshot" width="380"></p>
 
+## ⭐ Highlights
+
+<table>
+<tr>
+<td valign="top" width="33%">
+
+**📥 Universal Downloader**
+
+Mainstream 6 platforms (YouTube / X / Bilibili / Instagram / TikTok / Telegram media) plus all 1000+ sites yt-dlp covers. Pick quality (best / 1080p / 720p / 480p); subtitles / thumbnails / MP3 / M4A all come along.
+
+</td>
+<td valign="top" width="33%">
+
+**🤖 Send a Link, Get a File**
+
+Forward any URL to your Telegram bot — file pushed back in seconds. Inline buttons to pick format / quality. Multi-user via `ALLOWED_USERS` allowlist.
+
+</td>
+<td valign="top" width="33%">
+
+**🖥️ Web Console**
+
+`:5000` file browser with in-page preview (video / audio) + task queue monitor + disk dashboard. Optional password. Dark-first theme.
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="33%">
+
+**☁️ Auto Cloud Sync**
+
+Native rclone backends: OneDrive / Google Drive / S3 / R2 / NAS (Samba / SFTP). Baidu / Aliyun / Quark via AList → WebDAV bridge. Auto-upload on completion, or `/sync` on demand.
+
+</td>
+<td valign="top" width="33%">
+
+**🔓 Premium Content via Cookies**
+
+Drop `youtube.txt` / `xcom.txt` / `bilibili.txt` into `./cookies/` to grab YouTube Premium / X private / Bilibili VIP. Hot-reloaded, no restart needed.
+
+</td>
+<td valign="top" width="33%">
+
+**⚡ 5-Minute Install**
+
+`bash install.sh` interactive wizard handles proxy + Telegram + cloud + cookies in one pass. Or `python3 install_tui.py` for a TUI variant. 4 Docker services, amd64 + arm64.
+
+</td>
+</tr>
+</table>
+
+<details>
+<summary><strong>📋 Full features (continuously expanding)</strong></summary>
+
+**Platform support**
+
+| Platform | Supported content |
+|----------|-------------------|
+| 🎬 YouTube | Video (best / 1080p / 720p / 480p) / MP3 / M4A / subs / thumbnails |
+| 🐦 X.com (Twitter) | Video / images / all media |
+| 📺 Bilibili | Video / audio |
+| 📸 Instagram | Video / images |
+| 🎵 TikTok | Video / audio |
+| 🌐 Other | All 1000+ sites yt-dlp supports |
+| 📨 Telegram media | Just forward the message to the bot to save it |
+
+**Architecture / deployment**
+
+- 4 services: `bot` (Pyrogram + PTB) · `worker` (yt-dlp + rclone) · `web` (Flask UI) · `redis` (task queue)
+- Two installers: Shell wizard (`install.sh`, zero deps) and Python TUI (`install_tui.py`, auto-installs questionary + rich)
+- Concurrency configurable (`MAX_CONCURRENT_DOWNLOADS`)
+- Per-file size cap configurable (`MAX_FILE_SIZE_MB`)
+- China-proxy friendly: one config, all in-container HTTP traffic routes through it
+- CIFS / NAS shared mount propagation (`:shared`)
+- `/api/health` endpoint (returns version + redis status)
+
+**Cloud sync details**
+
+- Native rclone backends: onedrive / drive / s3 / smb / sftp / webdav / ftp
+- AList bridging: Baidu / Aliyun / Quark / Xunlei / 115 / PikPak / Tianyi / Yidong CaiYun / 189, etc.
+- Trigger modes: `auto` (on completion) or `manual` (`/sync`)
+- Post-upload behavior: keep local or delete
+
+**Security / ops**
+
+- Three-line defense: env vars + pre-commit hook + GitHub CI sensitive-content scan
+- Standard docker-compose ops: logs / restart / update yt-dlp / task cleanup
+- Clean uninstall: `docker compose down --rmi all --volumes` + `rm -rf <install dir>`
+
+</details>
+
 ## Quick install
 
 ### Option 1: Shell interactive wizard (recommended, zero deps)
@@ -63,20 +154,6 @@ mkdir -p downloads sessions cookies rclone
 docker compose up -d --build
 docker compose logs -f
 ```
-
----
-
-## Features
-
-| Platform | Supported content |
-|----------|-------------------|
-| 🎬 YouTube | Video (best / 1080p / 720p / 480p) / MP3 / M4A / subs / thumbnails |
-| 🐦 X.com (Twitter) | Video / images / all media |
-| 📺 Bilibili | Video / audio |
-| 📸 Instagram | Video / images |
-| 🎵 TikTok | Video / audio |
-| 🌐 Other | All 1000+ sites yt-dlp supports |
-| 📨 Telegram media | Just forward the message to the bot to save it |
 
 ---
 
