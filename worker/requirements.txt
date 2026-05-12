@@ -1,5 +1,5 @@
 pyrogram==2.0.106
 TgCrypto==1.2.5
-redis[asyncio]==5.0.8
+redis[asyncio]==7.4.0
 yt-dlp[default]>=2025.1.1
 aiofiles==24.1.0
